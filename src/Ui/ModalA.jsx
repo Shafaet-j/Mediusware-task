@@ -1,9 +1,17 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 export default function ModalA({ isOpen, setIsOpen }) {
   function closeModal() {
     setIsOpen(false);
   }
+
+  const [contact, setContact] = useState([]);
+  console.log(contact);
+  useEffect(() => {
+    fetch("https://contact.mediusware.com/api/contacts/")
+      .then((res) => res.json())
+      .then((data) => setContact(data.results));
+  }, []);
 
   return (
     <>
@@ -52,6 +60,11 @@ export default function ModalA({ isOpen, setIsOpen }) {
                   <div className="mt-2">
                     <button>All Contact</button>
                     <button>US Contact</button>
+                  </div>
+                  <div className=" flex">
+                    {contact.map((item) => (
+                      <p key={item.id}>{item?.phone}</p>
+                    ))}
                   </div>
 
                   <div className="mt-4">
